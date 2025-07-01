@@ -1,0 +1,26 @@
+# Environments
+.env
+.env*.local
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv/
+
+# Secrets
+*.json
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv/
+
+venv*/
+output/
+*.pyc
+__pycache__/
+.env 

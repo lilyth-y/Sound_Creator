@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 대화 생성기</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI 대화 생성기</h1>
+            <p>캐릭터와 상황을 설정하여 현실감 넘치는 대화 음성을 만들어보세요.</p>
+        </header>
+
+        <main>
+            <div class="settings-grid">
+                <!-- Speaker A Settings -->
+                <div class="speaker-card" id="speaker-a-card">
+                    <h2>화자 A</h2>
+                    <div class="form-group">
+                        <label for="a-gender">성별</label>
+                        <input type="text" id="a-gender" value="남성">
+                    </div>
+                    <div class="form-group">
+                        <label for="a-age">연령대</label>
+                        <input type="text" id="a-age" value="30대 초반">
+                    </div>
+                    <div class="form-group">
+                        <label for="a-personality">성격</label>
+                        <textarea id="a-personality" rows="3">다소 충동적이고, 새로운 도전을 즐기는 긍정적인 성격</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="a-voice">목소리 선택</label>
+                        <select id="a-voice"></select>
+                    </div>
+                </div>
+
+                <!-- Speaker B Settings -->
+                <div class="speaker-card" id="speaker-b-card">
+                    <h2>화자 B</h2>
+                    <div class="form-group">
+                        <label for="b-gender">성별</label>
+                        <input type="text" id="b-gender" value="여성">
+                    </div>
+                    <div class="form-group">
+                        <label for="b-age">연령대</label>
+                        <input type="text" id="b-age" value="30대 초반">
+                    </div>
+                    <div class="form-group">
+                        <label for="b-personality">성격</label>
+                        <textarea id="b-personality" rows="3">현실적이고 신중하며, 친구를 걱정하는 따뜻한 마음씨</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="b-voice">목소리 선택</label>
+                        <select id="b-voice"></select>
+                    </div>
+                    <div class="form-group">
+                        <!-- 접근성 및 스타일 경고 해결: 숨김 span 제거, 라벨을 radio 그룹에 명확히 연결 -->
+                        <fieldset style="border:0; padding:0; margin:0;">
+                            <legend id="b-tts-engine-label-vis">TTS 엔진 선택</legend>
+                            <input type="radio" name="b-tts-engine" id="b-tts-gcp" value="gcp" checked aria-labelledby="b-tts-engine-label-vis">
+                            <label for="b-tts-gcp">GCP</label>
+                            <input type="radio" name="b-tts-engine" id="b-tts-elevenlabs" value="elevenlabs" aria-labelledby="b-tts-engine-label-vis">
+                            <label for="b-tts-elevenlabs">ElevenLabs</label>
+                        </fieldset>
+                    </div>
+                    <div class="form-group b-elevenlabs-voice-group" id="b-elevenlabs-voice-group">
+                        <label for="b-elevenlabs-voice">ElevenLabs 목소리</label>
+                        <select id="b-elevenlabs-voice"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 날짜 선택 -->
+            <div class="date-card">
+                <h2>날짜 선택</h2>
+                <div class="form-group">
+                    <label for="date">생성 날짜</label>
+                    <input type="date" id="date">
+                </div>
+            </div>
+
+            <!-- 방언 사용 옵션 -->
+            <div class="dialect-card">
+                <h2>방언 사용</h2>
+                <div class="form-group">
+                    <label for="use-dialect">방언 사용</label>
+                    <input type="checkbox" id="use-dialect">
+                    <label for="dialect-select">방언 종류</label>
+                    <select id="dialect-select" disabled title="방언 종류">
+                        <option value="">선택 안 함</option>
+                        <option value="경상도">경상도</option>
+                        <option value="전라도">전라도</option>
+                        <option value="충청도">충청도</option>
+                        <option value="강원도">강원도</option>
+                        <option value="제주도">제주도</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="relationship-card">
+                <h2>관계 설정</h2>
+                <div class="form-group">
+                    <label for="relationship">A와 B의 관계</label>
+                    <input type="text" id="relationship" value="오랜 친구" placeholder="예: 오랜 친구, 어색한 동료 등">
+                </div>
+            </div>
+
+            <!-- AI 자동 목소리 선택 옵션 -->
+            <div class="ai-voice-card">
+                <h2>AI 자동 목소리 선택</h2>
+                <div class="form-group">
+                    <label for="ai-voice-selection">AI가 캐릭터와 상황에 맞춰 최적의 목소리를 자동 선택</label>
+                    <input type="checkbox" id="ai-voice-selection">
+                    <p class="help-text">체크하면 나이, 성별, 성격, 관계를 분석하여 가장 적합한 목소리를 자동으로 선택합니다.</p>
+                </div>
+            </div>
+
+            <div class="tags-card">
+                <h2>상황 태그</h2>
+                <div class="form-group">
+                    <label for="tags">콤마(,)로 구분하여 태그를 입력하세요.</label>
+                    <input type="text" id="tags" value="#퇴사선언, #세계여행, #친구와의 대화, #놀람과 걱정">
+                </div>
+            </div>
+            
+            <!-- 대화 시간(초) 입력 -->
+            <div class="duration-card">
+                <h2>대화 시간</h2>
+                <div class="form-group">
+                    <label for="duration">대화 시간(초, 예: 30)</label>
+                    <input type="number" id="duration" min="10" max="300" step="1" value="30">
+                </div>
+            </div>
+
+            <div class="action-section">
+                <button id="generate-btn">오디오 생성</button>
+            </div>
+
+            <div id="result-section" class="hidden">
+                <h2>생성된 오디오</h2>
+                <audio id="audio-player" controls></audio>
+                <div id="loading-spinner" class="spinner hidden"></div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Powered by Gemini & FastAPI</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+openai
+python-dotenv
+google-cloud-texttospeech
+pydub
+fastapi
+uvicorn[standard]
+numpy
+scipy
+librosa
+soundfile
+requests
+pydantic
+pydantic-core
+elevenlabs
