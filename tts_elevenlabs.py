@@ -6,6 +6,7 @@ ElevenLabs TTS helper module: converts text to WAV (bytes).
 from elevenlabs import generate, set_api_key  # type: ignore
 import os
 from typing import Optional
+import re
 
 # Load API key from environment
 ELEVENLABS_API_KEY: Optional[str] = os.getenv("ELEVENLABS_API_KEY")
@@ -40,9 +41,11 @@ def synthesize_speech_elevenlabs(
     Returns:
         WAV (PCM 44.1 kHz, 16-bit) audio bytes.
     """
+    # ElevenLabs는 SSML을 지원하지 않으므로 간단히 태그 제거
+    clean_text = re.sub(r"<[^>]+>", "", text)
     return generate(
         voice_id=voice_id,
-        text=text,
+        text=clean_text,
         model=model,
         stability=stability,
         similarity_boost=similarity_boost,
