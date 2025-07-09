@@ -178,6 +178,30 @@ def get_pitch_and_rate(gender, age):
         rate = 1.05
     return pitch, rate
 
+# ---------------------------------------------------------------------------
+# Legacy compatibility for test_elevenlabs.py
+# ---------------------------------------------------------------------------
+# The original test script expected a function named ``test_elevenlabs_voices``
+# in ``main.py`` which listed available ElevenLabs voices. Because we have
+# migrated to Google Cloud TTS, we provide a stub that now lists the available
+# GCP Chirp-ko voices instead.  This avoids breaking the existing test without
+# requiring changes to the script name.
+
+def test_elevenlabs_voices():
+    """Return the available GCP TTS voice pool.
+
+    The function name is kept for backward-compatibility with the legacy test
+    script.  It no longer touches the ElevenLabs API (which may be exhausted)
+    and simply prints and returns the list of Chirp-ko voices obtained from
+    ``tts_engine.get_valid_voice_pool``.
+    """
+
+    voices = get_valid_voice_pool()
+    logger.info("[GCP TTS] Available voices count: %d", len(voices))
+    # Print for visibility when the function is run via the standalone test
+    print("GCP Chirp-ko voices:", voices)
+    return voices
+
 # --- 정적 파일 서빙 (프론트엔드) ---
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
